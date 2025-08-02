@@ -4,6 +4,8 @@ const Gameboard = () => {
   const board = {
     min: 0,
     max: 9,
+    maxShipSize: 5,
+    minShipSize: 1,
     occupied: new Set(),
     totalShips: 0,
     sunkenShips: 0,
@@ -33,6 +35,8 @@ const Gameboard = () => {
     if (outOfBounds(from) || outOfBounds(to)) return false;
 
     const size = Math.abs(from[0] - to[0] || from[1] - to[1]) + 1;
+
+    if (invalidShipSize(size)) return false;
 
     const ship = {
       id: ships.length,
@@ -107,6 +111,10 @@ const Gameboard = () => {
     }
 
     return [fixedNum, varyingNum, factor, fixedAxis, target];
+  }
+
+  function invalidShipSize(size) {
+    return size < board.minShipSize || size > board.maxShipSize;
   }
 
   function invalidShape(from, to) {
