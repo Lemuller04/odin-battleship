@@ -2,6 +2,7 @@
   --dark-background: #0c244a;
   --light-background: #e6ecf5;
   --light-text-color: #e6ebf2;
+  --cell-size: 50px;
 }
 
 *,
@@ -51,4 +52,26 @@ main {
   grid-template: 1fr / 1fr 1fr;
   justify-items: center;
   align-items: center;
+}
+
+main>div {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.board-container {
+  display: grid;
+  grid-template: auto / repeat(10, auto);
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, .1);
+  gap: 1px;
+  background-color: var(--dark-background);
+  border: 1px solid var(--dark-background);
+}
+
+.cell {
+  background-color: #fff;
+  width: var(--cell-size);
+  height: var(--cell-size);
 }

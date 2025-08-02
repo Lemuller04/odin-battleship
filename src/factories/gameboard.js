@@ -10,8 +10,20 @@ const Gameboard = () => {
     totalShips: 0,
     sunkenShips: 0,
     attacked: new Set(),
+    domElements: [],
   };
   const ships = [];
+
+  (function createDivs() {
+    for (let i = 0; i <= board.max; i++) {
+      for (let j = 0; j <= board.max; j++) {
+        const div = document.createElement("div");
+        div.classList.add("cell");
+        div.id = `${i},${j}`;
+        board.domElements.push(div);
+      }
+    }
+  })();
 
   function receiveAttack(coord) {
     let shipId = isOccupied([coord])[0];
@@ -131,6 +143,7 @@ const Gameboard = () => {
   return {
     newShip,
     receiveAttack,
+    board,
   };
 };
 
