@@ -5,6 +5,9 @@ describe("Gameboard factory's newShip function", () => {
     expect(Gameboard().newShip([0, 0], [0, 1])).toBeTruthy();
     expect(Gameboard().newShip([0, 0], [0, 9])).toBeTruthy();
     expect(Gameboard().newShip([0, 9], [0, 0])).toBeTruthy();
+  });
+
+  it("Creates a ship of size 1", () => {
     expect(Gameboard().newShip([0, 0], [0, 0])).toBeTruthy();
     expect(Gameboard().newShip([9, 9], [9, 9])).toBeTruthy();
   });
@@ -31,5 +34,18 @@ describe("Gameboard factory's newShip function", () => {
     gb.newShip([0, 0], [0, 4]);
     expect(gb.newShip([0, 0], [4, 0])).toBeFalsy();
     expect(gb.newShip([9, 4], [0, 4])).toBeFalsy();
+    expect(gb.newShip([0, 0], [0, 0])).toBeFalsy();
+  });
+
+  it("Receives attacks on water", () => {
+    let gb = Gameboard();
+    gb.newShip([0, 0], [0, 0]);
+    expect(gb.receiveAttack([0, 1])).toBe("water");
+  });
+
+  it("Receives attacks on ships", () => {
+    let gb = Gameboard();
+    gb.newShip([0, 0], [0, 0]);
+    expect(gb.receiveAttack([0, 0])).toBe("ship");
   });
 });
