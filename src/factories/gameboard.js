@@ -12,18 +12,18 @@ const Gameboard = () => {
   const ships = [];
 
   function receiveAttack(coord) {
-    let shipId;
-    console.log(board.occupied);
-    for (let entry of board.occupied) {
-      console.log("aljsdklajsdlajs");
-    }
-    for (let ship of ships) {
-      if (ship.id == shipId) {
-        ship.hit();
-        if (ship.isSunk()) board.sunkenShips++;
-        return "ship";
+    let shipId = isOccupied([coord])[0];
+
+    if (shipId) {
+      for (let ship of ships) {
+        if (shipId === ship.id.toString()) {
+          ship.ship.hit();
+          if (ship.ship.isSunk()) board.sunkenShips++;
+        }
       }
+      return "ship";
     }
+
     board.attacked.add(coord.toString());
     return "water";
   }
@@ -52,9 +52,7 @@ const Gameboard = () => {
   function isOccupied(path) {
     for (let cell of board.occupied) {
       for (let coord of path) {
-        if (coord.toString() === cell.split(":")[1]) {
-          return true;
-        }
+        if (coord.toString() === cell.split(":")[1]) return cell.split(":");
       }
     }
     return false;
@@ -102,8 +100,8 @@ const Gameboard = () => {
       target = to[1];
     } else {
       varyingNum = from[0];
-      fixedNum = from[0];
-      factor = 0;
+      fixedNum = from[1];
+      factor = 1;
       fixedAxis = "x";
       target = to[0];
     }
