@@ -3,6 +3,8 @@
   --light-background: #e6ecf5;
   --light-text-color: #e6ebf2;
   --cell-size: 50px;
+  --default-cell-hover: #8db39c;
+  --water-cell: #8ab7ff;
 }
 
 *,
@@ -74,4 +76,22 @@ main>div {
   background-color: #fff;
   width: var(--cell-size);
   height: var(--cell-size);
+  border: none;
+}
+
+.cell:hover,
+.cell:active {
+  cursor: pointer;
+  background-color: var(--default-cell-hover);
+  outline: none;
+}
+
+.ship,
+.ship:hover {
+  background-color: #888;
+}
+
+.water,
+.water:hover {
+  background-color: var(--water-cell);
 }

@@ -17,16 +17,22 @@ const Gameboard = () => {
   (function createDivs() {
     for (let i = 0; i <= board.max; i++) {
       for (let j = 0; j <= board.max; j++) {
-        const div = document.createElement("div");
-        div.classList.add("cell");
-        div.id = `${i},${j}`;
-        board.domElements.push(div);
+        const button = document.createElement("button");
+        button.classList.add("cell");
+        button.id = `${i},${j}`;
+        board.domElements.push(button);
       }
     }
   })();
 
   function receiveAttack(coord) {
     let shipId = isOccupied([coord])[0];
+
+    for (const entry of board.attacked) {
+      if (entry === coord.toString()) return false;
+    }
+
+    board.attacked.add(coord.toString());
 
     if (shipId) {
       for (let ship of ships) {
@@ -35,14 +41,30 @@ const Gameboard = () => {
           if (ship.ship.isSunk()) board.sunkenShips++;
         }
       }
-      return "ship";
+      console.log("Enemy ship hit");
+
+      for (let button of board.domElements) {
+        if (button.id === coord.toString()) {
+          button.classList.add("ship");
+        }
+      }
+
+      if (board.sunkenShips === board.totalShips) {
+        console.log("You win!");
+      }
+      return true;
     }
 
-    board.attacked.add(coord.toString());
-    return "water";
+    for (let button of board.domElements) {
+      if (button.id === coord.toString()) {
+        button.classList.add("water");
+      }
+    }
+    console.log("Water hit");
+    return true;
   }
 
-  function newShip(from, to) {
+  function newShip(from, to, tag = undefined) {
     if (invalidShape(from, to)) return false;
     if (outOfBounds(from) || outOfBounds(to)) return false;
 
@@ -58,7 +80,7 @@ const Gameboard = () => {
 
     if (isOccupied(ship.path)) return false;
 
-    registerOccupiedCoords(ship);
+    registerOccupiedCoords(ship, tag);
     ships.push(ship);
     board.totalShips++;
 
@@ -75,9 +97,17 @@ const Gameboard = () => {
   }
 
   // Register the occupied cells using shipdId:coord format
-  function registerOccupiedCoords(ship) {
+  function registerOccupiedCoords(ship, tag) {
     for (let coord of ship.path) {
       board.occupied.add(`${ship.id}:${coord}`);
+
+      if (tag) {
+        for (let button of board.domElements) {
+          if (button.id === coord.toString()) {
+            button.classList.add(tag);
+          }
+        }
+      }
     }
   }
 
