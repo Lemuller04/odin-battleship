@@ -4,7 +4,8 @@
   --light-text-color: #e6ebf2;
   --cell-size: 50px;
   --default-cell-hover: #8db39c;
-  --water-cell: #8ab7ff;
+  --water-cell-color: #8ab7ff;
+  --hit-ship-color: #917471;
 }
 
 *,
@@ -51,7 +52,7 @@ footer {
 
 main {
   display: grid;
-  grid-template: 1fr / 1fr 1fr;
+  grid-template: auto auto / 1fr 1fr;
   justify-items: center;
   align-items: center;
 }
@@ -61,6 +62,24 @@ main>div {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.message-container {
+  grid-area: 1 / 1 / 2 / 3;
+  font-size: 1.6rem;
+  font-weight: 700;
+  align-self: end;
+  position: relative;
+  min-width: 700px;
+}
+
+.previous-message {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(0, 0, 0, .3);
+  font-size: 1.3rem;
 }
 
 .board-container {
@@ -93,5 +112,9 @@ main>div {
 
 .water,
 .water:hover {
-  background-color: var(--water-cell);
+  background-color: var(--water-cell-color);
+}
+
+.hit {
+  background-color: var(--hit-ship-color);
 }

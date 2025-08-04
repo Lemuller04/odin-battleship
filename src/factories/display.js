@@ -1,6 +1,8 @@
 import Events from "./events.js";
 
 const Display = (() => {
+  let previousMessage = "Place your ships";
+
   function purge(container) {
     while (container.firstChild) {
       container.removeChild(container.firstChild);
@@ -20,5 +22,15 @@ const Display = (() => {
     }
   }
 
+  function updateMessage(msg) {
+    const span = document.querySelector(".previous-message");
+    const messageP = document.querySelector(".message");
+
+    previousMessage = messageP.textContent;
+    span.textContent = previousMessage;
+    messageP.textContent = msg;
+  }
+
+  Events.subscribe("message:updated", updateMessage);
   Events.subscribe("players:created", displayBoard);
 })();

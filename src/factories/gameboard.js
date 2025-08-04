@@ -1,3 +1,4 @@
+import Events from "./events.js";
 import Ship from "./ship.js";
 
 const Gameboard = () => {
@@ -12,6 +13,17 @@ const Gameboard = () => {
     attacked: new Set(),
     domElements: [],
   };
+  const messages = {
+    placeShip: "Place your ships",
+    hitWater: "You hit water",
+    hitShip: "You hit an enemy ship",
+    sunkShip: "You sunk an enemy ship",
+    win: "You win! All enemy ships are gone, congratulations.",
+    aiHitWater: "The enemy hit water",
+    aiHitShip: "The enemy hit one of your ships",
+    aiSunkShip: "The enemy sunk one of your ships",
+    aiWin: "You lose, all your ships are gone.",
+  };
   const ships = [];
 
   (function createDivs() {
@@ -25,11 +37,13 @@ const Gameboard = () => {
     }
   })();
 
-  function receiveAttack(coord) {
+  function receiveAttack(coord, from) {
     let shipId = isOccupied([coord])[0];
 
     for (const entry of board.attacked) {
-      if (entry === coord.toString()) return false;
+      if (entry === coord.toString()) {
+        return false;
+      }
     }
 
     board.attacked.add(coord.toString());
@@ -38,19 +52,32 @@ const Gameboard = () => {
       for (let ship of ships) {
         if (shipId === ship.id.toString()) {
           ship.ship.hit();
-          if (ship.ship.isSunk()) board.sunkenShips++;
+          if (ship.ship.isSunk()) {
+            board.sunkenShips++;
+            if (from === "human") {
+              Events.publish("message:updated", messages.sunkShip);
+            } else {
+              Events.publish("message:updated", messages.aiSunkShip);
+            }
+          } else {
+            if (from === "human") {
+              Events.publish("message:updated", messages.hitShip);
+            } else {
+              Events.publish("message:updated", messages.aiHitShip);
+            }
+          }
         }
       }
-      console.log("Enemy ship hit");
 
       for (let button of board.domElements) {
         if (button.id === coord.toString()) {
           button.classList.add("ship");
+          button.classList.add("hit");
         }
       }
 
       if (board.sunkenShips === board.totalShips) {
-        console.log("You win!");
+        Events.publish("message:updated", messages.win);
       }
       return true;
     }
@@ -60,7 +87,11 @@ const Gameboard = () => {
         button.classList.add("water");
       }
     }
-    console.log("Water hit");
+    if (from === "human") {
+      Events.publish("message:updated", messages.hitWater);
+    } else {
+      Events.publish("message:updated", messages.aiHitWater);
+    }
     return true;
   }
 
