@@ -21,6 +21,8 @@ const Display = (() => {
       }
       boardContainer = boardContainers[1];
     }
+
+    updateMiddle("Drag to place your ships");
   }
 
   function updateMessage(msg) {
@@ -33,15 +35,9 @@ const Display = (() => {
   }
 
   function endGame(winner) {
+    purge(document.querySelector(".middle"));
     toggleBoards();
-
-    const middle = document.querySelector(".middle");
-    const button = document.createElement("button");
-    button.textContent = "Play again";
-    button.id = "play-again";
-    middle.appendChild(button);
-
-    Events.publish("buttons:rendered", button);
+    updateMiddle("Play again", "play-again");
   }
 
   function toggleBoards() {
@@ -52,6 +48,18 @@ const Display = (() => {
     }
   }
 
+  function updateMiddle(message, id = "") {
+    purge(document.querySelector(".middle"));
+
+    const middle = document.querySelector(".middle");
+    const button = document.createElement("button");
+    button.textContent = message;
+    button.id = id;
+    middle.appendChild(button);
+    Events.publish("buttons:rendered", button);
+  }
+
+  Events.subscribe("ships:created", updateMiddle);
   Events.subscribe("boards:toggled", toggleBoards);
   Events.subscribe("game:ended", endGame);
   Events.subscribe("message:updated", updateMessage);

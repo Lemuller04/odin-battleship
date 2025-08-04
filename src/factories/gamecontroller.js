@@ -48,6 +48,7 @@ const GameController = (() => {
 
         firstCoord = null; // reset after each attempt
         if (sizes.length < 1) {
+          Events.publish("ships:created");
           continueSetup();
         }
       });
