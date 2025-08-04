@@ -12,13 +12,63 @@ const GameController = (() => {
     };
 
     Events.publish("players:created", players);
+    humanTurn = true;
 
-    newShipHuman(players.human.gb, [0, 0], [0, 4]);
-    newShipHuman(players.human.gb, [2, 0], [2, 2]);
-    newShipHuman(players.human.gb, [9, 9], [9, 9]);
+    setupHumanBoardButtons();
+  }
 
+  function continueSetup() {
     setupAiBoard();
     setUpAttackButtons();
+  }
+
+  function setupHumanBoardButtons() {
+    const buttons = Array.from(document.querySelectorAll(".cell")).slice(
+      0,
+      100,
+    );
+    let path = [];
+    let sizes = [5, 4, 3, 3, 2];
+    let firstCoord = null;
+
+    buttons.forEach((button) => {
+      button.addEventListener("mousedown", () => {
+        firstCoord = parseCoords(button.id);
+      });
+
+      button.addEventListener("mouseup", () => {
+        if (!firstCoord) return;
+        const secondCoord = parseCoords(button.id);
+        const size = pathSize([firstCoord, secondCoord]);
+
+        if (sizes.includes(size)) {
+          players.human.gb.newShip(firstCoord, secondCoord, "ship");
+          sizes.splice(sizes.indexOf(size), 1);
+        }
+
+        firstCoord = null; // reset after each attempt
+        if (sizes.length < 1) {
+          continueSetup();
+        }
+      });
+    });
+
+    function parseCoords(id) {
+      return id.split(",").map(Number);
+    }
+  }
+
+  function pathSize(path) {
+    let size = -1;
+    if (path[0][0] === path[1][0]) {
+      size = path[0][1] - path[1][1];
+    } else if (path[0][1] === path[1][1]) {
+      size = path[0][0] - path[1][0];
+    } else {
+      return size;
+    }
+
+    return Math.abs(size) + 1;
   }
 
   function setupAiBoard() {
@@ -69,16 +119,6 @@ const GameController = (() => {
         humanTurn = true;
       }
     }
-  }
-
-  function newShipHuman(board, from, to) {
-    board.newShip(from, to, "ship");
-    Events.publish("ship:added", players);
-  }
-
-  function newShipAi(board, from, to) {
-    board.newShip(from, to, "ai-ship");
-    Events.publish("ship:added", players);
   }
 
   function setUpAttackButtons() {
