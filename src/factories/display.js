@@ -10,6 +10,7 @@ const Display = (() => {
   }
 
   function displayBoard(players) {
+    purge(document.querySelector(".middle"));
     const boardContainers = document.querySelectorAll(".board-container");
     let boardContainer = boardContainers[0];
 
@@ -31,6 +32,28 @@ const Display = (() => {
     messageP.textContent = msg;
   }
 
+  function endGame(winner) {
+    toggleBoards();
+
+    const middle = document.querySelector(".middle");
+    const button = document.createElement("button");
+    button.textContent = "Play again";
+    button.id = "play-again";
+    middle.appendChild(button);
+
+    Events.publish("buttons:rendered", button);
+  }
+
+  function toggleBoards() {
+    const boards = document.querySelectorAll(".board-container");
+
+    for (let board of boards) {
+      board.classList.toggle("inactive");
+    }
+  }
+
+  Events.subscribe("boards:toggled", toggleBoards);
+  Events.subscribe("game:ended", endGame);
   Events.subscribe("message:updated", updateMessage);
   Events.subscribe("players:created", displayBoard);
 })();

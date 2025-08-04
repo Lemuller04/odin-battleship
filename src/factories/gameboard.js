@@ -77,7 +77,12 @@ const Gameboard = () => {
       }
 
       if (board.sunkenShips === board.totalShips) {
-        Events.publish("message:updated", messages.win);
+        if (from === "human") {
+          Events.publish("message:updated", messages.win);
+        } else {
+          Events.publish("message:updated", messages.aiWin);
+        }
+        Events.publish("game:ended", from);
       }
       return true;
     }

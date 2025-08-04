@@ -17,9 +17,9 @@ const GameController = (() => {
     newShipHuman(players.human.gb, [2, 0], [2, 2]);
     newShipHuman(players.human.gb, [9, 9], [9, 9]);
 
-    newShipAi(players.ai.gb, [5, 0], [5, 4]);
+    // newShipAi(players.ai.gb, [5, 0], [5, 4]);
     newShipAi(players.ai.gb, [9, 9], [9, 9]);
-    newShipAi(players.ai.gb, [8, 0], [7, 0]);
+    // newShipAi(players.ai.gb, [8, 0], [7, 0]);
 
     setUpAttackButtons();
   }
@@ -70,5 +70,13 @@ const GameController = (() => {
     });
   }
 
+  function setupButtons(buttons) {
+    buttons.addEventListener("click", () => {
+      Events.publish("boards:toggled");
+      initialSetup();
+    });
+  }
+
   Events.subscribe("page:loaded", initialSetup);
+  Events.subscribe("buttons:rendered", setupButtons);
 })();
