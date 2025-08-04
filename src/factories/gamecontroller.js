@@ -17,11 +17,41 @@ const GameController = (() => {
     newShipHuman(players.human.gb, [2, 0], [2, 2]);
     newShipHuman(players.human.gb, [9, 9], [9, 9]);
 
-    // newShipAi(players.ai.gb, [5, 0], [5, 4]);
-    newShipAi(players.ai.gb, [9, 9], [9, 9]);
-    // newShipAi(players.ai.gb, [8, 0], [7, 0]);
-
+    setupAiBoard();
     setUpAttackButtons();
+  }
+
+  function setupAiBoard() {
+    let sizes = [5, 4, 3, 3, 2];
+    let shipCount = 0;
+
+    while (shipCount < sizes.length) {
+      const size = sizes[shipCount];
+      let isHorizontal = Math.random() < 0.5;
+
+      let y1 = Math.floor(Math.random() * 10);
+      let x1 = Math.floor(Math.random() * 10);
+      let y2 = y1;
+      let x2 = x1;
+
+      if (isHorizontal) {
+        x2 = x1 + size - 1;
+        if (x2 >= 10) {
+          x1 = x1 - size + 1;
+          x2 = x1 + size - 1;
+        }
+      } else {
+        y2 = y1 + size - 1;
+        if (y2 >= 10) {
+          y1 = y1 - size + 1;
+          y2 = y1 + size - 1;
+        }
+      }
+
+      if (players.ai.gb.newShip([y1, x1], [y2, x2], "ship")) {
+        shipCount++;
+      }
+    }
   }
 
   function aiController() {
