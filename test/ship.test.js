@@ -17,4 +17,18 @@ describe("Ship factory methods", () => {
     ship.hit();
     expect(ship.isSunk()).toBeTruthy();
   });
+
+  it("Tracks number of hits accurately", () => {
+    let ship = Ship(3);
+    ship.hit();
+    ship.hit();
+    expect(ship.getHits()).toBe(2);
+  });
+
+  it("Does not exceed max hits", () => {
+    let ship = Ship(1);
+    ship.hit();
+    ship.hit();
+    expect(ship.getHits()).toBe(1);
+  });
 });

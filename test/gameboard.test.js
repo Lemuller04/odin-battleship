@@ -44,12 +44,19 @@ describe("Gameboard factory's newShip function", () => {
   it("Receives attacks on water", () => {
     let gb = Gameboard();
     gb.newShip([0, 0], [0, 0]);
-    expect(gb.receiveAttack([0, 1])).toBe("water");
+    expect(gb.receiveAttack([0, 1])).toBeTruthy();
   });
 
   it("Receives attacks on ships", () => {
     let gb = Gameboard();
     gb.newShip([0, 0], [0, 0]);
-    expect(gb.receiveAttack([0, 0])).toBe("ship");
+    expect(gb.receiveAttack([0, 0])).toBeTruthy();
+  });
+
+  it("Doens't attack already attacked cells", () => {
+    let gb = Gameboard();
+    gb.newShip([0, 0], [0, 0]);
+    gb.receiveAttack([0, 0]);
+    expect(gb.receiveAttack([0, 0])).toBeFalsy();
   });
 });
