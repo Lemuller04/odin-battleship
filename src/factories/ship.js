@@ -1,10 +1,12 @@
 const Ship = (size) => {
   let hits = 0;
-  let sunk = false;
 
   return {
-    hit: () => hits++,
+    hit: () => {
+      if (hits !== size) hits++;
+    },
     isSunk: () => hits === size,
+    getHits: () => hits,
   };
 };
 
