@@ -134,7 +134,7 @@ const Gameboard = () => {
     return false;
   }
 
-  // Register the occupied cells using shipdId:coord format
+  // Register the occupied cells using shipId:coord format
   function registerOccupiedCoords(ship, tag) {
     for (let coord of ship.path) {
       board.occupied.add(`${ship.id}:${coord}`);

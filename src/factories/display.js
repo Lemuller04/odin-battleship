@@ -68,6 +68,8 @@ const Display = (() => {
   function updateMiddle(message, id) {
     purge(document.querySelector(".middle"));
 
+    if (!message) return;
+
     const middle = document.querySelector(".middle");
     const button = document.createElement("button");
     button.innerHTML = message;

@@ -100,7 +100,7 @@ const GameController = (() => {
         }
       }
 
-      if (players.ai.gb.newShip([y1, x1], [y2, x2], "ship")) {
+      if (players.ai.gb.newShip([y1, x1], [y2, x2], "ai-ship")) {
         shipCount++;
       }
     }

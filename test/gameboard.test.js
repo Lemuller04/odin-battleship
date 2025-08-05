@@ -33,7 +33,7 @@ describe("Gameboard factory's newShip function", () => {
     expect(Gameboard().newShip([-1, -1], [-1, -1])).toBeFalsy();
   });
 
-  it("Doens't create ovelapped ships", () => {
+  it("Doesn't create overlapped ships", () => {
     let gb = Gameboard();
     gb.newShip([0, 0], [0, 4]);
     expect(gb.newShip([0, 0], [4, 0])).toBeFalsy();
@@ -53,7 +53,7 @@ describe("Gameboard factory's newShip function", () => {
     expect(gb.receiveAttack([0, 0])).toBeTruthy();
   });
 
-  it("Doens't attack already attacked cells", () => {
+  it("Doesn't attack already attacked cells", () => {
     let gb = Gameboard();
     gb.newShip([0, 0], [0, 0]);
     gb.receiveAttack([0, 0]);
