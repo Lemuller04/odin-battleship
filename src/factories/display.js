@@ -1,8 +1,6 @@
 import Events from "./events.js";
 
 const Display = (() => {
-  let previousMessage = "Place your ships";
-
   function purge(container) {
     while (container.firstChild) {
       container.removeChild(container.firstChild);
@@ -25,13 +23,18 @@ const Display = (() => {
     updateMiddle("Drag to place your ships");
   }
 
-  function updateMessage(msg) {
+  function updateMessage([msg, from]) {
     const span = document.querySelector(".previous-message");
     const messageP = document.querySelector(".message");
 
-    previousMessage = messageP.textContent;
-    span.textContent = previousMessage;
-    messageP.textContent = msg;
+    if (from === "human") {
+      messageP.textContent = msg;
+    } else if (from === "ai") {
+      span.textContent = msg;
+    } else {
+      span.textContent = "";
+      messageP.textContent = msg;
+    }
   }
 
   function endGame(winner) {

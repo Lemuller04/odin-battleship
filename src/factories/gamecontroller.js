@@ -148,6 +148,7 @@ const GameController = (() => {
     button.addEventListener("click", () => {
       if (button.id === "play-again") {
         Events.publish("boards:toggled");
+        Events.publish("message:updated", ["Place your ships", "controller"]);
         initialSetup();
       }
     });

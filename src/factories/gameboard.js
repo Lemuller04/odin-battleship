@@ -55,15 +55,15 @@ const Gameboard = () => {
           if (ship.ship.isSunk()) {
             board.sunkenShips++;
             if (from === "human") {
-              Events.publish("message:updated", messages.sunkShip);
+              Events.publish("message:updated", [messages.sunkShip, from]);
             } else {
-              Events.publish("message:updated", messages.aiSunkShip);
+              Events.publish("message:updated", [messages.aiSunkShip, from]);
             }
           } else {
             if (from === "human") {
-              Events.publish("message:updated", messages.hitShip);
+              Events.publish("message:updated", [messages.hitShip, from]);
             } else {
-              Events.publish("message:updated", messages.aiHitShip);
+              Events.publish("message:updated", [messages.aiHitShip, from]);
             }
           }
         }
@@ -78,9 +78,9 @@ const Gameboard = () => {
 
       if (board.sunkenShips === board.totalShips) {
         if (from === "human") {
-          Events.publish("message:updated", messages.win);
+          Events.publish("message:updated", [messages.win, from]);
         } else {
-          Events.publish("message:updated", messages.aiWin);
+          Events.publish("message:updated", [messages.aiWin, from]);
         }
         Events.publish("game:ended", from);
       }
@@ -93,9 +93,9 @@ const Gameboard = () => {
       }
     }
     if (from === "human") {
-      Events.publish("message:updated", messages.hitWater);
+      Events.publish("message:updated", [messages.hitWater, from]);
     } else {
-      Events.publish("message:updated", messages.aiHitWater);
+      Events.publish("message:updated", [messages.aiHitWater, from]);
     }
     return true;
   }
