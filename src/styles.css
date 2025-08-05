@@ -141,3 +141,16 @@ main>div {
 .uninteractive {
   pointer-events: none;
 }
+
+.sunk {
+  color: red;
+}
+
+#hint {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  font-weight: 700;
+  pointer-events: none;
+  outline: none;
+}

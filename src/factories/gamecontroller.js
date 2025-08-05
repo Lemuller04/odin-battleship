@@ -150,6 +150,7 @@ const GameController = (() => {
         Events.publish("boards:toggled");
         Events.publish("message:updated", ["Place your ships", "controller"]);
         initialSetup();
+        Events.publish("shipList:reseted", [5, 4, 3, 3, 2]);
       }
     });
   }

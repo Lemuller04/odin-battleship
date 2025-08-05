@@ -56,8 +56,10 @@ const Gameboard = () => {
             board.sunkenShips++;
             if (from === "human") {
               Events.publish("message:updated", [messages.sunkShip, from]);
+              Events.publish("ship:sunk", [from, ship.ship.getSize()]);
             } else {
               Events.publish("message:updated", [messages.aiSunkShip, from]);
+              Events.publish("ship:sunk", [from, ship.ship.getSize()]);
             }
           } else {
             if (from === "human") {

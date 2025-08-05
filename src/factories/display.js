@@ -20,7 +20,7 @@ const Display = (() => {
       boardContainer = boardContainers[1];
     }
 
-    updateMiddle("Drag to place your ships");
+    updateMiddle("Drag on your board<br>to place your ships", "hint");
   }
 
   function updateMessage([msg, from]) {
@@ -70,15 +70,56 @@ const Display = (() => {
 
     const middle = document.querySelector(".middle");
     const button = document.createElement("button");
-    button.textContent = message;
+    button.innerHTML = message;
     button.id = id;
     middle.appendChild(button);
     Events.publish("buttons:rendered", button);
   }
 
+  function updateShipCount([from, size]) {
+    const list = from !== "human" ? "left" : "right";
+    const ps = document.querySelectorAll(`.${list}>p`);
+
+    for (const p of ps) {
+      if (p.textContent.includes(size) && !p.classList.contains("sunk")) {
+        p.classList.add("sunk");
+        let text = p.textContent.split("");
+        text.pop();
+        text.push("0");
+        p.textContent = text.join("");
+
+        return;
+      }
+    }
+  }
+
+  function resetShipList(sizes) {
+    while (sizes[0]) {
+      let size = sizes.shift();
+      helper(size, "left");
+      helper(size, "right");
+    }
+
+    function helper(size, list) {
+      const ps = document.querySelectorAll(`.${list}>p`);
+
+      for (const p of ps) {
+        if (p.textContent.includes(size) && p.classList.contains("sunk")) {
+          p.classList.remove("sunk");
+          let text = p.textContent.split("");
+          text.pop();
+          text.push(size);
+          p.textContent = text.join("");
+        }
+      }
+    }
+  }
+
+  Events.subscribe("shipList:reseted", resetShipList);
   Events.subscribe("ships:created", updateMiddle);
   Events.subscribe("boards:toggled", toggleBoards);
   Events.subscribe("game:ended", endGame);
   Events.subscribe("message:updated", updateMessage);
   Events.subscribe("players:created", displayBoard);
+  Events.subscribe("ship:sunk", updateShipCount);
 })();

@@ -7,6 +7,7 @@ const Ship = (size) => {
     },
     isSunk: () => hits === size,
     getHits: () => hits,
+    getSize: () => size,
   };
 };
 
