@@ -40,15 +40,29 @@ const Display = (() => {
     updateMiddle("Play again", "play-again");
   }
 
-  function toggleBoards() {
-    const boards = document.querySelectorAll(".board-container");
+  function toggleBoards(owner) {
+    let boards;
 
-    for (let board of boards) {
-      board.classList.toggle("inactive");
+    if (owner) {
+      if (owner === "human") {
+        boards = Array.from(document.querySelectorAll(".cell")).slice(0, 100);
+      } else {
+        boards = Array.from(document.querySelectorAll(".cell")).slice(100, 200);
+      }
+
+      for (let board of boards) {
+        board.classList.toggle("uninteractive");
+      }
+    } else {
+      boards = document.querySelectorAll(".cell");
+
+      for (let board of boards) {
+        board.classList.toggle("inactive");
+      }
     }
   }
 
-  function updateMiddle(message, id = "") {
+  function updateMiddle(message, id) {
     purge(document.querySelector(".middle"));
 
     const middle = document.querySelector(".middle");

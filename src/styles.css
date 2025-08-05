@@ -128,11 +128,16 @@ main>div {
   background-color: var(--water-cell-color);
 }
 
-.hit {
+.hit,
+.hit:hover {
   background-color: var(--hit-ship-color);
 }
 
 .inactive {
   filter: grayscale(80%) brightness(80%);
+  pointer-events: none;
+}
+
+.uninteractive {
   pointer-events: none;
 }

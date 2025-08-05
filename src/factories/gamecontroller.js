@@ -20,6 +20,7 @@ const GameController = (() => {
   function continueSetup() {
     setupAiBoard();
     setUpAttackButtons();
+    Events.publish("boards:toggled", "human");
   }
 
   function setupHumanBoardButtons() {
@@ -118,6 +119,7 @@ const GameController = (() => {
       if (players.human.gb.receiveAttack(coords, "ai")) {
         attackSuccesfull = true;
         humanTurn = true;
+        Events.publish("boards:toggled", "human");
       }
     }
   }
@@ -134,6 +136,7 @@ const GameController = (() => {
           let coords = [Number(button.id[0]), Number(button.id[2])];
           if (players.ai.gb.receiveAttack(coords, "human")) {
             humanTurn = false;
+            Events.publish("boards:toggled", "human");
             aiController();
           }
         }
@@ -141,10 +144,12 @@ const GameController = (() => {
     });
   }
 
-  function setupButtons(buttons) {
-    buttons.addEventListener("click", () => {
-      Events.publish("boards:toggled");
-      initialSetup();
+  function setupButtons(button) {
+    button.addEventListener("click", () => {
+      if (button.id === "play-again") {
+        Events.publish("boards:toggled");
+        initialSetup();
+      }
     });
   }
 
